@@ -2,32 +2,37 @@
 
 import os
 
-import pygame
+import pygame as pg
 
-# Ship Image Path.
-SHIP_PATH = os.path.join(os.pardir, 'images/ship.bmp')
+SHIP_PATH = os.path.join(os.pardir, 'resources/images/ship.bmp')
 
 
 class Ship:
     """A class to manage the ship."""
 
-    def __int__(self, ai_game):
+    def __init__(self, ai_game):
         """Initialize the ship and set its starting position."""
         self.screen = ai_game.screen
-        self.screen_rect = ai_game.sceren.get_rect()
+        self.screen_rect = ai_game.screen.get_rect()
 
         # Load the ship image and get its rect.
-        self.image = pygame.image.load(SHIP_PATH)
+        self.image = pg.image.load(SHIP_PATH)
         self.rect = self.image.get_rect()
 
-        # Start eac new ship at the bottom center of the screen.
-        self.rect.mid_bottom = self.screen_rect.mid_bottom
+        # Start each new ship at the bottom center of the screen.
+        self.rect.midbottom = self.screen_rect.midbottom
 
-    def blit_me(self):
+        # Movement flags
+        self.moving_right = False
+        self.moving_left = False
+
+    def update(self):
+        """Update the ship's position based on the movement flags."""
+        if self.moving_right:
+            self.rect.x += 1
+        if self.moving_left:
+            self.rect.x -= 1
+
+    def blitme(self):
         """Draw the ship at its current location."""
         self.screen.blit(self.image, self.rect)
-
-
-
-
-
