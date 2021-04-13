@@ -18,6 +18,8 @@ class Ship:
 
         # Load the ship image and get its rect.
         self.image = pg.image.load(SHIP_PATH)
+        # Remove background from ship image
+        self.image.set_colorkey((255, 255, 255))
         self.rect = self.image.get_rect()
 
         # Start each new ship at the bottom center of the screen.
