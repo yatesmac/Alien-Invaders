@@ -3,8 +3,8 @@ class Settings:
 
     # Constant game settings
     # Screen settings
-    screen_width = 1200
-    screen_height = 800
+    screen_width = 900
+    screen_height = 600
     bg_color = (230, 230, 230)
 
     # Bullet settings
@@ -15,13 +15,14 @@ class Settings:
     bullets_allowed = 5
 
     # Alien settings
-    alien_speed = 0.2
-    fleet_drop_speed = 8
+    alien_speed = 0.1
+    fleet_drop_speed = 5
 
     def __init__(self):
         """Initialize the game's settings."""
         # Ship settings
-        self.ship_speed = 1
+        self.ship_speed = 0.75
+        self.ship_limit = 3
 
         # Alien settings
         # fleet_direction of 1 represents right; -1, left.
