@@ -16,7 +16,7 @@ class Alien(Sprite):
         self.settings = ai_game.settings
 
         # load the alien image and set its rect attribute.
-        self.image = pg.image.load(ALIEN_PATH)
+        self.image = pg.image.load(ALIEN_PATH).convert()
         # Remove background from ship image
         self.image.set_colorkey((255, 255, 255))
         self.rect = self.image.get_rect()

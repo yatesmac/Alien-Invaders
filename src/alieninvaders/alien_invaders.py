@@ -8,14 +8,17 @@ from pygame.locals import (
     K_LEFT,
     K_RIGHT,
     K_SPACE,
+    K_RETURN,
     K_ESCAPE,
     KEYDOWN,
     KEYUP,
     QUIT,
+    MOUSEBUTTONDOWN,
 )
 
 from alien import Alien
 from bullet import Bullet
+from button import Button
 from game_stats import GameStats
 from settings import Settings
 from ship import Ship
@@ -36,6 +39,9 @@ class AlienInvasion:
         self.bullets = pg.sprite.Group()
         self.aliens = pg.sprite.Group()
         self._create_fleet()
+
+        # Make a Play button
+        self.play_button = Button(self, 'Click here or press Enter to play')
 
     def run_game(self):
         """Start main loop for the game."""
@@ -59,21 +65,62 @@ class AlienInvasion:
     def _check_events(self):
         """Respond to key presses and mouse events."""
         for event in pg.event.get():
-            self._check_quit(event)
+            if self._quit_game(event):
+                sys.exit()
 
-            if event.type == KEYDOWN:
+            if self._start_game(event) and not self.stats.game_active:
+                # Reset the game settings
+                self.settings.initialize_dynamic_settings()
+                self._setup_new_game()
+            elif event.type == KEYDOWN:
                 self._check_keydown_events(event)
             elif event.type == KEYUP:
                 self._check_keyup_events(event)
 
     @staticmethod
-    def _check_quit(event):
+    def _quit_game(event):
         """Check if the user wants to exit the game."""
-        if event.type == QUIT or (
+        return event.type == QUIT or (
                 event.type == KEYDOWN and
                 event.key == K_ESCAPE
-        ):
-            sys.exit()
+        )
+
+    def _start_game(self, event):
+        """Start a new game when the clicks Play or hits Enter"""
+        # The player clicks Play.
+        if event.type == MOUSEBUTTONDOWN:
+            return self.play_button.rect.collidepoint(
+                pg.mouse.get_pos()
+            )
+        # The player presses enter.
+        else:
+            return event.type == KEYDOWN and event.key == K_RETURN
+
+    def _setup_new_game(self):
+        """Reset the game statistics and create a new board."""
+        self.stats.reset_stats()
+        self.stats.game_active = True
+
+        # Get rid of any remaining aliens and bullets.
+        self.aliens.empty()
+        self.bullets.empty()
+
+        # Create a new fleet and center the ship
+        self._create_fleet()
+        self.ship.center_ship()
+
+        # Hide the mouse cursor.
+        pg.mouse.set_visible(False)
+
+    def _create_new_gameboard(self):
+        """Return the game to the starting state"""
+        # Get rid of any remaining aliens and bullets.
+        self.aliens.empty()
+        self.bullets.empty()
+
+        # Create a new fleet and center the ship
+        self._create_fleet()
+        self.ship.center_ship()
 
     def _check_keydown_events(self, event):
         """Respond to key presses."""
@@ -129,6 +176,7 @@ class AlienInvasion:
         """Respond to the ship being hit by an alien."""
         if self.stats.ships_left < 0:  # no more lives left
             self.stats.game_active = False
+            pg.mouse.set_visible(True)
 
         # Decrement ships left
         self.stats.ships_left -= 1
@@ -136,6 +184,7 @@ class AlienInvasion:
         # Get rid of any remaining aliens and bullets.
         self.aliens.empty()
         self.bullets.empty()
+        self.settings.increase_speed()
 
         # Create a new fleet and center the ship
         self._create_fleet()
@@ -210,13 +259,19 @@ class AlienInvasion:
             alien.rect.y += self.settings.fleet_drop_speed
         self.settings.fleet_direction *= -1
 
+
+
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
         self.screen.fill(self.settings.bg_color)
-        self.ship.blitme()
+        self.ship.draw_ship()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
+
+        # Draw the play button if the game is inactive.
+        if not self.stats.game_active:
+            self.play_button.draw_button()
 
         pg.display.flip()
 

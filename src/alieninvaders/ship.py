@@ -17,7 +17,7 @@ class Ship:
         self.screen_rect = ai_game.screen.get_rect()
 
         # Load the ship image and get its rect.
-        self.image = pg.image.load(SHIP_PATH)
+        self.image = pg.image.load(SHIP_PATH).convert()
         # Remove background from ship image
         self.image.set_colorkey((255, 255, 255))
         self.rect = self.image.get_rect()
@@ -45,6 +45,6 @@ class Ship:
         self.rect.midbottom = self.screen_rect.midbottom
         self.x = float(self.rect.x)
 
-    def blitme(self):
+    def draw_ship(self):
         """Draw the ship at its current location."""
         self.screen.blit(self.image, self.rect)
