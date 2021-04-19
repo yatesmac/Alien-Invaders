@@ -20,6 +20,7 @@ from alien import Alien
 from bullet import Bullet
 from button import Button
 from game_stats import GameStats
+from scoreboard import ScoreBoard
 from settings import Settings
 from ship import Ship
 
@@ -35,6 +36,7 @@ class AlienInvasion:
             (self.settings.screen_width, self.settings.screen_height)
         )
         self.stats = GameStats(self)
+        self.score_board = ScoreBoard(self)
         self.ship = Ship(self)
         self.bullets = pg.sprite.Group()
         self.aliens = pg.sprite.Group()
@@ -100,6 +102,8 @@ class AlienInvasion:
         """Reset the game statistics and create a new board."""
         self.stats.reset_stats()
         self.stats.game_active = True
+        self.score_board.prep_score()
+        self.score_board.prep_level()
 
         # Get rid of any remaining aliens and bullets.
         self.aliens.empty()
@@ -111,16 +115,6 @@ class AlienInvasion:
 
         # Hide the mouse cursor.
         pg.mouse.set_visible(False)
-
-    def _create_new_gameboard(self):
-        """Return the game to the starting state"""
-        # Get rid of any remaining aliens and bullets.
-        self.aliens.empty()
-        self.bullets.empty()
-
-        # Create a new fleet and center the ship
-        self._create_fleet()
-        self.ship.center_ship()
 
     def _check_keydown_events(self, event):
         """Respond to key presses."""
@@ -163,10 +157,21 @@ class AlienInvasion:
             self.bullets, self.aliens, True, True
         )
 
+        if collisions:
+            for aliens in collisions.values():
+                self.stats.score += self.settings.alien_points * len(aliens)
+            self.score_board.prep_score()
+            self.score_board.check_high_score()
+
         if not self.aliens:
             # Destroy existing bullets and create new fleet.
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
+
+            # Increase level.
+            self.stats.level += 1
+            self.score_board.prep_level()
 
     def _update_ship(self):
         """Update the ship's position on the board."""
@@ -174,7 +179,7 @@ class AlienInvasion:
 
     def _ship_hit(self):
         """Respond to the ship being hit by an alien."""
-        if self.stats.ships_left < 0:  # no more lives left
+        if self.stats.ships_left < 1:  # no more lives left
             self.stats.game_active = False
             pg.mouse.set_visible(True)
 
@@ -259,8 +264,6 @@ class AlienInvasion:
             alien.rect.y += self.settings.fleet_drop_speed
         self.settings.fleet_direction *= -1
 
-
-
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
         self.screen.fill(self.settings.bg_color)
@@ -268,6 +271,9 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
+
+        # Draw the score information
+        self.score_board.show_score()
 
         # Draw the play button if the game is inactive.
         if not self.stats.game_active:
