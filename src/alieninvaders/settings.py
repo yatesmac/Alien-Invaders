@@ -17,7 +17,7 @@ class Settings:
     fleet_drop_speed = 5
 
     # How quickly the game speeds up.
-    speedup_scale = 1.2
+    speedup_scale = 1.1
 
     # How quickly the alien point values increase
     score_scale = 1.5
@@ -31,9 +31,9 @@ class Settings:
 
     def initialize_dynamic_settings(self):
         """Reset the ship's dynamic settings."""
-        self.ship_speed = 0.75
-        self.bullet_speed = 0.75
-        self.alien_speed = 0.1
+        self.ship_speed = 2.5
+        self.bullet_speed = 7.5
+        self.alien_speed = 1.0
 
         # Scoring
         self.alien_points = 50

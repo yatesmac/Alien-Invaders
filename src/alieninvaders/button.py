@@ -1,4 +1,8 @@
+from os import path, pardir
+
 import pygame as pg
+
+FONT = path.join(pardir, 'resources/fonts/nunito.ttf')
 
 
 class Button:
@@ -14,7 +18,7 @@ class Button:
         self.screen = ai_game.screen
         self.screen_rect = self.screen.get_rect()
 
-        self.font = pg.font.SysFont(None, 21)
+        self.font = pg.font.Font(FONT, 14)
 
         # Build the button's rect object and center it.
         self.rect = pg.Rect(0, 0, self.width, self.height)

@@ -1,23 +1,24 @@
 """Module defining Player's Ship."""
 
-import os
+from os import path, pardir
 
 import pygame as pg
+from pygame.sprite import Sprite
 
-SHIP_PATH = os.path.join(os.pardir, 'resources/images/ship.bmp')
 
-
-class Ship:
+class Ship(Sprite):
     """A class to manage the ship."""
 
     def __init__(self, ai_game):
         """Initialize the ship and set its starting position."""
+        super().__init__()
+        # self.ship_path = os.path.join(os.pardir, 'resources/images/ship.bmp')
         self.screen = ai_game.screen
         self.settings = ai_game.settings
         self.screen_rect = ai_game.screen.get_rect()
 
         # Load the ship image and get its rect.
-        self.image = pg.image.load(SHIP_PATH).convert()
+        self.image = pg.image.load(self.ship_img).convert()
         # Remove background from ship image
         self.image.set_colorkey((255, 255, 255))
         self.rect = self.image.get_rect()
@@ -28,6 +29,10 @@ class Ship:
         # Movement flags
         self.moving_right = False
         self.moving_left = False
+
+    @property
+    def ship_img(self):
+        return path.join(pardir, 'resources/images/ship.bmp')
 
     def update(self):
         """Update the ship's position based on the movement flags."""

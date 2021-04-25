@@ -1,9 +1,7 @@
-import os
+from os import path, pardir
 
 import pygame as pg
 from pygame.sprite import Sprite
-
-BULLET_PATH = os.path.join(os.pardir, 'resources/images/bullet.bmp')
 
 
 class Bullet(Sprite):
@@ -16,20 +14,20 @@ class Bullet(Sprite):
         self.settings = ai_game.settings
 
         # Load the bullet image and get its rect.
-        self.image = pg.image.load(BULLET_PATH).convert()
+        self.image = pg.image.load(self.bullet_img).convert()
         # Remove background from ship image
         self.image.set_colorkey((255, 255, 255))
         self.rect = self.image.get_rect()
 
-        # self.color = self.settings.bullet_color
-        # Create a bullet rect at (0, 0) and then set correct position
-        # self.rect = pg.Rect(
-        #    0, 0, self.settings.bullet_width, self.settings.bullet_height
-        # )
+        # Create a bullet rect at the top of our ship.
         self.rect.midtop = ai_game.ship.rect.midtop
 
         # Store the bullet's position as a decimal value.
         self.y = float(self.rect.y)
+
+    @property
+    def bullet_img(self):
+        return path.join(pardir, 'resources/images/bullet.bmp')
 
     def update(self):
         """Move the bullet up the screen."""
@@ -42,3 +40,18 @@ class Bullet(Sprite):
         """Draw the bullet to the screen."""
         # pg.draw.rect(self.screen, self.color, self.rect)
         self.screen.blit(self.image, self.rect)
+
+
+class Missile(Bullet):
+    """A class to manage missiles fired by the aliens."""
+    def __init__(self, ai_game):
+        self.rect.midbottom = ai_game.alien.rect.midbottom
+
+        # Store the bullet's position as a decimal value.
+        self.y = float(self.rect.y)
+
+        super().__init__(ai_game)
+
+    @property
+    def bullet_img(self):
+        return path.join(pardir, 'resources/images/bullet.bmp')

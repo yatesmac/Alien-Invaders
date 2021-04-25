@@ -1,9 +1,9 @@
-import os
+from os import path, pardir
 
 import pygame as pg
 from pygame.sprite import Sprite
 
-ALIEN_PATH = os.path.join(os.pardir, 'resources/images/alien.bmp')
+ALIEN_IMG = path.join(pardir, 'resources/images/alien.bmp')
 
 
 class Alien(Sprite):
@@ -16,7 +16,7 @@ class Alien(Sprite):
         self.settings = ai_game.settings
 
         # load the alien image and set its rect attribute.
-        self.image = pg.image.load(ALIEN_PATH).convert()
+        self.image = pg.image.load(ALIEN_IMG).convert()
         # Remove background from ship image
         self.image.set_colorkey((255, 255, 255))
         self.rect = self.image.get_rect()
