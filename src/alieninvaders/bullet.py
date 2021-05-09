@@ -7,7 +7,7 @@ from pygame.sprite import Sprite
 
 import color
 
-BULLET_IMG = path.join(pardir, 'resources/images/bullet.bmp')
+BULLET_IMG = path.join(pardir, "resources/images/bullet.bmp")
 
 
 class Bullet(Sprite):

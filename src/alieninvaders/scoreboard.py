@@ -16,15 +16,16 @@ from pygame.sprite import Group
 import color
 from ship import Ship
 
-DEFAULT_PATH = path.join(pardir, 'resources/')
-SHIP_IMG = DEFAULT_PATH + 'images/ship.bmp'
-FONT = DEFAULT_PATH + 'fonts/nunito.ttf'
+DEFAULT_PATH = path.join(pardir, "resources/")
+SHIP_IMG = DEFAULT_PATH + "images/ship.bmp"
+FONT = DEFAULT_PATH + "fonts/nunito.ttf"
 
 
 class DisplayShip(Ship):
     """
     A class representing smaller ships that represent the player's lives.
     """
+
     def __init__(self, game):
         super().__init__(game)
 
@@ -64,14 +65,12 @@ class ScoreBoard:
         # Round the score to a multiple of ten, without affecting level.
         rounded_value: int = round(value, -1) if value > 500 else value
 
-        value_str = f'{value_string}: {rounded_value:,}'
-        return self.font.render(
-            value_str, True, self.text_color, color.BG_GRAY
-        )
+        value_str = f"{value_string}: {rounded_value:,}"
+        return self.font.render(value_str, True, self.text_color, color.BG_GRAY)
 
     def prep_score(self):
         """Position the rendered score on the game screen."""
-        self.score_image = self._render_image('Score', self.stats.score)
+        self.score_image = self._render_image("Score", self.stats.score)
 
         # Display the score at the top right of the screen.
         self.score_rect = self.score_image.get_rect()
@@ -80,9 +79,7 @@ class ScoreBoard:
 
     def prep_high_score(self):
         """Position the rendered high score on the game screen."""
-        self.high_score_image = self._render_image(
-            'High Score', self.stats.high_score
-        )
+        self.high_score_image = self._render_image("High Score", self.stats.high_score)
 
         # Display the score at rhe top right of the screen.
         self.high_score_rect = self.high_score_image.get_rect()
@@ -91,7 +88,7 @@ class ScoreBoard:
 
     def prep_level(self):
         """Position the rendered value on the game screen."""
-        self.level_image = self._render_image('Level', self.stats.level)
+        self.level_image = self._render_image("Level", self.stats.level)
 
         # Display the score at the top right of the screen.
         self.level_rect = self.level_image.get_rect()

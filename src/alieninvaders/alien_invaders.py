@@ -36,11 +36,11 @@ from scoreboard import ScoreBoard
 from settings import Settings
 from ship import Ship
 
-DEFAULT_PATH = path.join(pardir, 'resources/')
-BACKGROUND_IMG = DEFAULT_PATH + 'images/back.bmp'
-SHOOT_WAV = DEFAULT_PATH + 'sounds/shoot.wav'
-SHIP_HIT_WAV = DEFAULT_PATH + 'sounds/ship_hit.wav'
-SHOT_ALIEN_WAV = DEFAULT_PATH + 'sounds/alien_shot.wav'
+DEFAULT_PATH = path.join(pardir, "resources/")
+BACKGROUND_IMG = DEFAULT_PATH + "images/back.bmp"
+SHOOT_WAV = DEFAULT_PATH + "sounds/shoot.wav"
+SHIP_HIT_WAV = DEFAULT_PATH + "sounds/ship_hit.wav"
+SHOT_ALIEN_WAV = DEFAULT_PATH + "sounds/alien_shot.wav"
 
 
 def main():
@@ -91,7 +91,7 @@ class AlienInvasion:
     def _init_pygame():
         """Initialize pygame and caption the game window."""
         pg.init()
-        pg.display.set_caption('Alien Invaders')
+        pg.display.set_caption("Alien Invaders")
 
     def check_events(self):
         """Respond to key presses and mouse events."""
@@ -114,18 +114,13 @@ class AlienInvasion:
     @staticmethod
     def _quit_game(event: pg.event.Event) -> bool:
         """Check if the user wants to exit the game."""
-        return event.type == QUIT or (
-                event.type == KEYDOWN and
-                event.key == K_ESCAPE
-        )
+        return event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE)
 
     def _start_game(self, event: pg.event.Event) -> bool:
         """Start a new game when the clicks Play or hits Enter"""
         # The player clicks Play.
         if event.type == MOUSEBUTTONDOWN:
-            return self.play_button.rect.collidepoint(
-                pg.mouse.get_pos()
-            )
+            return self.play_button.rect.collidepoint(pg.mouse.get_pos())
         # The player presses enter.
         else:
             return event.type == KEYDOWN and event.key == K_RETURN
@@ -175,9 +170,7 @@ class AlienInvasion:
     def _alien_bullet_collision(self):
         """Respond to bullet-alien collision."""
         # Remove any bullets and aliens that have collided.
-        collisions = pg.sprite.groupcollide(
-            self.bullets, self.aliens, True, True
-        )
+        collisions = pg.sprite.groupcollide(self.bullets, self.aliens, True, True)
 
         if collisions:
             for aliens in collisions.values():
@@ -226,9 +219,9 @@ class AlienInvasion:
         # Defaults to 1, sounds enabled.
         self.settings.sound_playing *= -1
         for _sound in (
-                self.shooting_sound,
-                self.ship_hit_sound,
-                self.alien_shot_sound,
+            self.shooting_sound,
+            self.ship_hit_sound,
+            self.alien_shot_sound,
         ):
             if self.settings.sound_playing == 1:
                 _sound.set_volume(0.2)
@@ -262,8 +255,7 @@ class AlienInvasion:
         """Update images on the screen, and flip to the new screen."""
         background = pg.image.load(BACKGROUND_IMG).convert()
         bg_image = pg.transform.scale(
-            background,
-            (self.settings.screen_width, self.settings.screen_height)
+            background, (self.settings.screen_width, self.settings.screen_height)
         )
         self.screen.blit(bg_image, (0, 0))
         self.ship.draw_ship()
@@ -278,15 +270,15 @@ class AlienInvasion:
         if not self.stats.game_active:
             # Button and Tag
             self.info_tag.prep_msg(
-                'Press Esc to exit. Press M to (un)mute game sounds.'
+                "Press Esc to exit. Press M to (un)mute game sounds."
             )
             self.info_tag.draw_button()
-            self.play_button.prep_msg('Click here or press Enter to play.')
+            self.play_button.prep_msg("Click here or press Enter to play.")
             self.play_button.draw_button()
 
         pg.display.flip()
         self.clock.tick(60)
 
-    
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

@@ -6,7 +6,7 @@ import pygame as pg
 
 import color
 
-FONT = path.join(pardir, 'resources/fonts/nunito.ttf')
+FONT = path.join(pardir, "resources/fonts/nunito.ttf")
 
 
 class Button:
@@ -26,13 +26,11 @@ class Button:
         # Build the button's rect object and position it.
         self.rect = pg.Rect(0, 0, self.width, self.height)
         self.rect.centerx = self.screen_rect.centerx
-        self.rect.centery = (self.screen_rect.centery - 25)
+        self.rect.centery = self.screen_rect.centery - 25
 
     def prep_msg(self, msg: str):
         """Turn msg into a rendered image and center text on the button."""
-        self.msg_image = self.font.render(
-            msg, True, self.text_color, self.button_color
-        )
+        self.msg_image = self.font.render(msg, True, self.text_color, self.button_color)
         self.msg_image_rect = self.msg_image.get_rect()
         self.msg_image_rect.center = self.rect.centerx, self.rect.centery
 
@@ -52,9 +50,6 @@ class Tag(Button):
         self.screen_rect = game.screen.get_rect()
 
         self.rect = game.play_button.rect
-        self.rect.centery = (self.screen_rect.centery + 25)
+        self.rect.centery = self.screen_rect.centery + 25
 
         super().__init__(game)
-
-
-

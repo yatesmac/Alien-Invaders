@@ -26,9 +26,9 @@ class Fleet:
         alien_width, alien_height = alien.rect.size
 
         # Position each alien.
-        alien.x = alien_width + 3/2 * alien_width * alien_number
+        alien.x = alien_width + 3 / 2 * alien_width * alien_number
         alien.rect.x = alien.x
-        alien.rect.y = alien.rect.height + 5/2 * alien.rect.height * row_number
+        alien.rect.y = alien.rect.height + 5 / 2 * alien.rect.height * row_number
 
         # Add the alien to the sprite group.
         self.aliens.add(alien)
@@ -40,15 +40,13 @@ class Fleet:
         alien_width, alien_height = alien.rect.size
 
         # Spacing between aliens is equal to one and a half (3/2) aliens width.
-        available_space_x = self.settings.screen_width - (3/2 * alien_width)
-        number_of_aliens_x = int(available_space_x / (3/2 * alien_width))
+        available_space_x = self.settings.screen_width - (3 / 2 * alien_width)
+        number_of_aliens_x = int(available_space_x / (3 / 2 * alien_width))
 
         # Determine the number of rows of aliens that fit on the screen.
         ship_height = self.ship.rect.height
         available_space_y = (
-                self.settings.screen_height
-                - (3 * alien_height)
-                - (3 * ship_height)
+            self.settings.screen_height - (3 * alien_height) - (3 * ship_height)
         )
         number_rows = available_space_y // (2 * alien_height)
 

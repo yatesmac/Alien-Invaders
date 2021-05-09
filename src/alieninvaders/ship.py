@@ -7,7 +7,7 @@ from pygame.sprite import Sprite
 
 import color
 
-SHIP_IMG = path.join(pardir, 'resources/images/ship.bmp')
+SHIP_IMG = path.join(pardir, "resources/images/ship.bmp")
 
 
 class Ship(Sprite):

@@ -7,7 +7,7 @@ the game starts up again. Thus the highest score ever attained is tracked.
 
 from os import path, pardir
 
-HIGH_SCORE_TXT = path.join(pardir, 'resources/logs/high-scores.txt')
+HIGH_SCORE_TXT = path.join(pardir, "resources/logs/high-scores.txt")
 
 
 class GameStats:
@@ -35,7 +35,7 @@ class GameStats:
 
     def write_highscore(self):
         """Write the high-score to file."""
-        with open(HIGH_SCORE_TXT, 'wt+') as f:
+        with open(HIGH_SCORE_TXT, "wt+") as f:
             try:
                 score = int(f.read())
             # If the file contains a non-numeric value, set high-score to 0.
@@ -56,5 +56,3 @@ class GameStats:
                 return 0
             else:
                 return score
-
-
