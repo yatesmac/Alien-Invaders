@@ -1,6 +1,6 @@
 """This module handles the creation of a Button or clear Tag instance."""
 
-from os import path, pardir
+from os import pardir, path
 
 import pygame as pg
 

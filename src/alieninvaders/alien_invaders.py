@@ -9,22 +9,22 @@ across all game modules, an instance of the class is passed to the initializers
 of some classes as the argument "game."
 """
 
-from os import path, pardir
+from os import pardir, path
 import sys
 from time import sleep
 
 import pygame as pg
 from pygame.mixer import Sound
 from pygame.locals import (
+    K_ESCAPE,
     K_LEFT,
+    K_RETURN,
     K_RIGHT,
     K_SPACE,
-    K_RETURN,
-    K_ESCAPE,
     KEYDOWN,
     KEYUP,
-    QUIT,
     MOUSEBUTTONDOWN,
+    QUIT,
     K_m,
 )
 
@@ -122,8 +122,7 @@ class AlienInvasion:
         if event.type == MOUSEBUTTONDOWN:
             return self.play_button.rect.collidepoint(pg.mouse.get_pos())
         # The player presses enter.
-        else:
-            return event.type == KEYDOWN and event.key == K_RETURN
+        return event.type == KEYDOWN and event.key == K_RETURN
 
     def _setup_new_game(self):
         """Reset the game statistics and create a new board."""

@@ -23,7 +23,7 @@ class Fleet:
         """Create an alien and place it in the row."""
         # Create an alien.
         alien = Alien(self)
-        alien_width, alien_height = alien.rect.size
+        alien_width, _ = alien.rect.size
 
         # Position each alien.
         alien.x = alien_width + 3 / 2 * alien_width * alien_number

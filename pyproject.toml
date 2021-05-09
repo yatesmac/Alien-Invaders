@@ -23,6 +23,9 @@ reports="no"
 [tool.pylint.FORMAT]
 max-line-length="88"
 
+[tool.pylint.BASIC]
+good-names = "_,x,y"
+
 [tool.black]
 line-length = 88
 include = '\.pyi?$'
@@ -32,5 +35,6 @@ profile = "black"
 multi_line_output = 3
 line_length = 88
 default_section = "THIRDPARTY"
-known_first_party = []
-known_third_party = []
+known_first_party = "alieninvaders"
+known_third_party = "pygame"
+

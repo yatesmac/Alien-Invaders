@@ -1,6 +1,6 @@
 """This module handles the creation of a Ship instance."""
 
-from os import path, pardir
+from os import pardir, path
 
 import pygame as pg
 from pygame.sprite import Sprite

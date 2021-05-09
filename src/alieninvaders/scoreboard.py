@@ -8,7 +8,7 @@ The score-board appears at the top of the game screen, showing:
     the current game level.
  """
 
-from os import path, pardir
+from os import pardir, path
 
 import pygame as pg
 from pygame.sprite import Group
@@ -26,11 +26,9 @@ class DisplayShip(Ship):
     A class representing smaller ships that represent the player's lives.
     """
 
-    def __init__(self, game):
-        super().__init__(game)
-
     @property
     def image(self) -> pg.Surface:
+        """Load the alien image and remove background."""
         image = pg.image.load(SHIP_IMG).convert()
         image = pg.transform.scale(image, (26, 30))
         image.set_colorkey(color.WHITE)

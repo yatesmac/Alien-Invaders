@@ -5,7 +5,7 @@ When the game ends, the high-score is stored in a file and retrieved when
 the game starts up again. Thus the highest score ever attained is tracked.
 """
 
-from os import path, pardir
+from os import pardir, path
 
 HIGH_SCORE_TXT = path.join(pardir, "resources/logs/high-scores.txt")
 
