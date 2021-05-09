@@ -1,14 +1,21 @@
+"""
+This module stores the game Statistics.
+
+When the game ends, the high-score is stored in a file and retrieved when
+the game starts up again. Thus the highest score ever attained is tracked.
+"""
+
 from os import path, pardir
 
 HIGH_SCORE_TXT = path.join(pardir, 'resources/logs/high-scores.txt')
 
 
 class GameStats:
-    """TRack statistics for Alien Invasion."""
+    """Track statistics for Alien Invaders game."""
 
-    def __init__(self, ai_game):
+    def __init__(self, game):
         """Initialize statistics."""
-        self.settings = ai_game.settings
+        self.settings = game.settings
         self.reset_stats()
         # Start Alien Invasion in an inactive state.
         self.game_active = False
@@ -16,7 +23,12 @@ class GameStats:
         self.high_score = self.file_score
 
     def reset_stats(self):
-        """Initialize statistics that can change during the game."""
+        """
+        Set dynamic statistics for the game.
+
+        Initialize statistics at the beginning of the game, or
+        Reset the statistics as the game progresses.
+        """
         self.ships_left = self.settings.ship_limit
         self.score = 0
         self.level = 1
@@ -34,7 +46,7 @@ class GameStats:
                     f.write(str(self.high_score))
 
     @property
-    def file_score(self):
+    def file_score(self) -> int:
         """Read the high-score from file."""
         with open(HIGH_SCORE_TXT) as f:
             try:

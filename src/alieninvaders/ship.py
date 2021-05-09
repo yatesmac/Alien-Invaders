@@ -1,26 +1,24 @@
-"""Module defining Player's Ship."""
+"""This module handles the creation of a Ship instance."""
 
 from os import path, pardir
 
 import pygame as pg
 from pygame.sprite import Sprite
 
+import color
+
+SHIP_IMG = path.join(pardir, 'resources/images/ship.bmp')
+
 
 class Ship(Sprite):
     """A class to manage the ship."""
 
-    def __init__(self, ai_game):
+    def __init__(self, game):
         """Initialize the ship and set its starting position."""
         super().__init__()
-        # self.ship_path = os.path.join(os.pardir, 'resources/images/ship.bmp')
-        self.screen = ai_game.screen
-        self.settings = ai_game.settings
-        self.screen_rect = ai_game.screen.get_rect()
-
-        # Load the ship image and get its rect.
-        self.image = pg.image.load(self.ship_img).convert()
-        # Remove background from ship image
-        self.image.set_colorkey((255, 255, 255))
+        self.screen = game.screen
+        self.settings = game.settings
+        self.screen_rect = game.screen.get_rect()
         self.rect = self.image.get_rect()
 
         # Start each new ship at the bottom center of the screen.
@@ -31,8 +29,11 @@ class Ship(Sprite):
         self.moving_left = False
 
     @property
-    def ship_img(self):
-        return path.join(pardir, 'resources/images/ship.bmp')
+    def image(self) -> pg.Surface:
+        """Load the alien image and remove background."""
+        image = pg.image.load(SHIP_IMG).convert()
+        image.set_colorkey(color.WHITE)
+        return image
 
     def update(self):
         """Update the ship's position based on the movement flags."""
@@ -46,7 +47,7 @@ class Ship(Sprite):
         self.rect.x = self.x
 
     def center_ship(self):
-        """Center the ship on the screen"""
+        """Center the ship on the screen."""
         self.rect.midbottom = self.screen_rect.midbottom
         self.x = float(self.rect.x)
 

@@ -1,30 +1,45 @@
+"""This module creates the alien fleet."""
+
 import pygame as pg
 
 from alien import Alien
 
 
 class Fleet:
-    def __init__(self, ai_game):
-        self.screen = ai_game.screen
-        self.settings = ai_game.settings
-        self.ship = ai_game.ship
+    """
+    A class to create a group of sprites where each alien in the
+    alien fleet will reside.
+    """
+
+    def __init__(self, game):
+        self.screen = game.screen
+        self.settings = game.settings
+        self.ship = game.ship
+
+        # The sprite group where the aliens will be stored.
         self.aliens = pg.sprite.Group()
 
-    def _create_alien(self, alien_number, row_number):
+    def _create_alien(self, alien_number: int, row_number: int):
         """Create an alien and place it in the row."""
+        # Create an alien.
         alien = Alien(self)
         alien_width, alien_height = alien.rect.size
+
+        # Position each alien.
         alien.x = alien_width + 3/2 * alien_width * alien_number
         alien.rect.x = alien.x
         alien.rect.y = alien.rect.height + 5/2 * alien.rect.height * row_number
+
+        # Add the alien to the sprite group.
         self.aliens.add(alien)
 
     def create_fleet(self):
         """Create the fleet of aliens."""
         # Create an alien and find the number of aliens in a row.
-        # Spacing between each alien is equal to one alien width.
         alien = Alien(self)
         alien_width, alien_height = alien.rect.size
+
+        # Spacing between aliens is equal to one and a half (3/2) aliens width.
         available_space_x = self.settings.screen_width - (3/2 * alien_width)
         number_of_aliens_x = int(available_space_x / (3/2 * alien_width))
 
