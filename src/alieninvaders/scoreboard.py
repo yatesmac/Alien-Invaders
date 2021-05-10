@@ -24,6 +24,7 @@ FONT = DEFAULT_PATH + "fonts/nunito.ttf"
 class DisplayShip(Ship):
     """
     A class representing smaller ships that represent the player's lives.
+    Extends Ship.
     """
 
     @property

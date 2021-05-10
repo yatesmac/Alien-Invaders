@@ -1,0 +1,4 @@
+include src/resources/fonts/*.ttf
+include src/resources/sounds/*.wav
+include src/resources/images/*.bmp
+include src/resources/logs/*.txt
