@@ -16,8 +16,8 @@ def read(*names, **kwargs):
 
 
 setup(
-    name="Alien Invaders",
-    version="1.0",
+    name="Alien Invaders Project",
+    version="0.1.0",
     # url="https://github.com/_/alieninvadersproject",
     author="Yates Macharaga",
     author_email="yatsiemac@gmail.com",
@@ -25,8 +25,8 @@ setup(
     # long_description=long_description,
     long_description_content_type="text/markdown",
     license="MIT",
-    packages=find_packages(where="src"),
-    package_dir={"": "src"},
+    packages=find_packages(where="alieninvaders"),
+    package_dir={"": "alieninvaders"},
     test_suite="tests",
     install_requires=[],
     include_package_data=True,
