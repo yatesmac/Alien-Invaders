@@ -6,8 +6,24 @@ build-backend = "flit_core.buildapi"
 module = "alieninvaders"
 author = "Yates Macharaga"
 author-email = "yatsiemac@gmail.com"
-classifiers = [ "License :: OSI Approved :: MIT License",]
 description-file = "README.md"
+home-page = "https://github.com/yatesmac/alieninvadersproject"
+classifiers = [ "License :: OSI Approved :: MIT License",]
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+exclude = """
+(/(
+    \.eggs
+  | \.git,
+  | \.tox,
+  | \.venv,
+  | _build
+  | build,
+  | dist,
+)/)
+"""
 
 [tool.pylint.MESSAGE_CONTROL]
 disable = """
@@ -24,17 +40,4 @@ reports="no"
 max-line-length="88"
 
 [tool.pylint.BASIC]
-good-names = "_,x,y"
-
-[tool.black]
-line-length = 88
-include = '\.pyi?$'
-
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-line_length = 88
-default_section = "THIRDPARTY"
-known_first_party = "alieninvaders"
-known_third_party = "pygame"
-
+good-names = "_,x,y,f"

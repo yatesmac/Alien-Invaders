@@ -1,4 +1,4 @@
-"""This module creates the alien fleet."""
+"""This module handles the creation of the alien fleet."""
 
 import pygame as pg
 
@@ -6,12 +6,10 @@ from alien import Alien
 
 
 class Fleet:
-    """
-    A class to create a group of sprites where each alien in the
-    alien fleet will reside.
-    """
+    """A class to create a sprite group to store aliens in the alien fleet."""
 
     def __init__(self, game):
+        """Initialize the game resources required for this class."""
         self.screen = game.screen
         self.settings = game.settings
         self.ship = game.ship
@@ -63,7 +61,7 @@ class Fleet:
                 break
 
     def change_fleet_direction(self):
-        """Drop the entire fleet and change the fleet's direction"""
+        """Drop the entire fleet and change the fleet's direction."""
         for alien in self.aliens.sprites():
             alien.rect.y += self.settings.fleet_drop_speed
         self.settings.fleet_direction *= -1

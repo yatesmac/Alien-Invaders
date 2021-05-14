@@ -1,5 +1,0 @@
-
-include resources/fonts/*.ttf
-include resources/sounds/*.wav
-include resources/images/*.bmp
-include resources/logs/*.txt

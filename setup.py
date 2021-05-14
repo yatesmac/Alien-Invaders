@@ -1,55 +1,81 @@
-import io
-import os
-import re
-from setuptools import setup, find_packages
-
-scriptFolder = os.path.dirname(os.path.realpath(__file__))
-os.chdir(scriptFolder)
+from os import path
+import sys
+from cx_Freeze import setup, Executable
 
 
-def read(*names, **kwargs):
-    with io.open(
-        join(dirname(__file__), *names),
-        encoding=kwargs.get('encoding', 'utf8')
-    ) as fh:
-        return fh.read()
+def file_path(filename: str) -> str:
+    if getattr(sys, "frozen", False):
+        # The application is frozen
+        datadir = path.dirname(sys.executable)
+    else:
+        # The application is not frozen
+        # Change this bit to match where you store your data files:
+        datadir = path.dirname(__file__)
+    return path.join(datadir, filename)
 
+
+# GUI applications require a different base on Windows
+# (the default is for a console application).
+base = None
+if sys.platform == "win32":
+    base = "Win32GUI"
+
+# Dependencies are automatically detected, but it might need fine tuning.
+build_exe_options = {
+    "packages": ["pygame"],
+    "include_files": [
+        *[
+            # Image files.
+            file_path(f"resources/images/{filename}")
+            for filename in [
+                "alien.bmp",
+                "back.bmp",
+                "bullet.bmp",
+                "ship.bmp",
+            ]
+        ],
+        *[
+            # Explosion files.
+            file_path(f"resources/images/explosions/explosion0{i}.jpg")
+            for i in range(9)
+         ],
+        *[
+            # Sound files
+            file_path(f"resources/sounds/{filename}")
+            for filename in [
+                "alien_shot.wav",
+                "ship_hit.wav",
+                "shoot.wav",
+            ]
+        ],
+        # High-score and font files
+        "resources/logs/high-scores.txt",
+        "resources/fonts/nunito.ttf",
+    ],
+}
+
+executables = [
+    file_path(f"alieninvders/{filename}")
+    for filename in [
+        "alien.py",
+        "alien_fleet.py",
+        "alieninvaders.py",
+        "bullet.py",
+        "button.py",
+        "color.py",
+        "game_stats.py",
+        "settings.py",
+        "scoreboard.py",
+        "ship.py",
+    ]
+]
 
 setup(
-    name="Alien Invaders Project",
-    version="0.1.0",
-    # url="https://github.com/_/alieninvadersproject",
-    author="Yates Macharaga",
-    author_email="yatsiemac@gmail.com",
-    description=("""The Alien Invaders Game"""),
-    # long_description=long_description,
-    long_description_content_type="text/markdown",
-    license="MIT",
-    packages=find_packages(where="alieninvaders"),
-    package_dir={"": "alieninvaders"},
-    test_suite="tests",
-    install_requires=[],
-    include_package_data=True,
-    zip_safe=False,
-    keywords="",
-    classifiers=[
-        "License :: OSI Approved :: MIT License",
-        'Operating System :: Unix',
-        'Operating System :: POSIX',
-        'Operating System :: Microsoft :: Windows',
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
-        'Programming Language :: Python :: Implementation :: CPython',
-    ],
-    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
-    entry_points={
-        'console_scripts': [
-            'alieninvaders = alieninvaders.alieninvaders:main',
-        ]
-    },
+    name="AlienInvaders",
+    version="1.0.0",
+    description="Space Shooter Gamme",
+    options={"build_exe": build_exe_options},
+    executables=Executable(
+        executables, base=base, copyDependentFiles=True, compress=True
+    ),
 )

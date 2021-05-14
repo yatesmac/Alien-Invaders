@@ -31,16 +31,21 @@ from pygame.locals import (
 from alien_fleet import Fleet
 from bullet import Bullet
 from button import Button, Tag
+from explosion import Explosion
 from game_stats import GameStats
 from scoreboard import ScoreBoard
 from settings import Settings
 from ship import Ship
 
-DEFAULT_PATH = path.join(pardir, "resources/")
-BACKGROUND_IMG = DEFAULT_PATH + "images/back.bmp"
-SHOOT_WAV = DEFAULT_PATH + "sounds/shoot.wav"
-SHIP_HIT_WAV = DEFAULT_PATH + "sounds/ship_hit.wav"
-SHOT_ALIEN_WAV = DEFAULT_PATH + "sounds/alien_shot.wav"
+BACKGROUND_IMG, SHOOT_WAV, SHIP_HIT_WAV, SHOT_ALIEN_WAV = [
+    path.join(pardir, f"resources/{resource}")
+    for resource in [
+        "images/back.bmp",
+        "sounds/shoot.wav",
+        "sounds/ship_hit.wav",
+        "sounds/alien_shot.wav",
+    ]
+]
 
 
 def main():
@@ -59,7 +64,7 @@ def main():
 
 
 class AlienInvasion:
-    """Overall class to manage game asserts and behavior"""
+    """Overall class to manage game asserts and behavior."""
 
     def __init__(self):
         """Initialize the game, and create game resources."""
@@ -73,15 +78,17 @@ class AlienInvasion:
         self.score_board = ScoreBoard(self)
         self.fleet = Fleet(self)
 
+        # Sprite groups.
         self.aliens = self.fleet.aliens
         self.bullets = pg.sprite.Group()
-        self.clock = pg.time.Clock()
+        self.explosions = pg.sprite.Group()
 
+        self.clock = pg.time.Clock()
         # Button and Tag
         self.play_button = Button(self)
         self.info_tag = Tag(self)
 
-        # Sounds
+        # Sounds.
         self.shooting_sound = Sound(SHOOT_WAV)
         self.ship_hit_sound = Sound(SHIP_HIT_WAV)
         self.alien_shot_sound = Sound(SHOT_ALIEN_WAV)
@@ -117,7 +124,7 @@ class AlienInvasion:
         return event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE)
 
     def _start_game(self, event: pg.event.Event) -> bool:
-        """Start a new game when the clicks Play or hits Enter"""
+        """Start a new game when the clicks Play or hits Enter."""
         # The player clicks Play.
         if event.type == MOUSEBUTTONDOWN:
             return self.play_button.rect.collidepoint(pg.mouse.get_pos())
@@ -174,8 +181,11 @@ class AlienInvasion:
         if collisions:
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
-                self.alien_shot_sound.play()
                 self.score_board.prep_score()
+                for alien in aliens:
+                    explosion = Explosion(alien.rect.center)
+                    self.explosions.add(explosion)
+                    self.alien_shot_sound.play()
             self.score_board.check_high_score()
 
         if not self.aliens:
@@ -194,15 +204,12 @@ class AlienInvasion:
             self.stats.game_active = False
             pg.mouse.set_visible(True)
 
-        self.ship_hit_sound.play()
-        sleep(0.5)
-
         # Decrement ships left, and update score-board
         self.stats.ships_left -= 1
         self.score_board.prep_ships()
 
         self._reset_sprites()
-        sleep(1.0)
+        sleep(1.5)
 
     def _alien_ground_collision(self):
         """Check if any aliens have reached the bottom of the screen."""
@@ -214,7 +221,7 @@ class AlienInvasion:
                 break
 
     def _update_sounds(self):
-        """Plays sounds if play = 1, stops sounds if play = -1"""
+        """Plays sounds if play = 1, stops sounds if play = -1."""
         # Defaults to 1, sounds enabled.
         self.settings.sound_playing *= -1
         for _sound in (
@@ -244,11 +251,16 @@ class AlienInvasion:
         self.aliens.update()
 
         # Look for alien-ship collisions
-        if pg.sprite.spritecollideany(self.ship, self.aliens):
+        if pg.sprite.spritecollide(self.ship, self.aliens, True):
+            explosion = Explosion(self.ship.rect.center)
+            self.explosions.add(explosion)
+            self.ship_hit_sound.play()
             self._alien_ship_collision()
 
         # Look for aliens hitting the bottom og the screen.
         self._alien_ground_collision()
+
+        self.explosions.update()
 
     def update_screen(self):
         """Update images on the screen, and flip to the new screen."""
@@ -258,9 +270,10 @@ class AlienInvasion:
         )
         self.screen.blit(bg_image, (0, 0))
         self.ship.draw_ship()
+        self.aliens.draw(self.screen)
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
-        self.aliens.draw(self.screen)
+        self.explosions.draw(self.screen)
 
         # Draw the score information
         self.score_board.show_score()
@@ -277,7 +290,6 @@ class AlienInvasion:
 
         pg.display.flip()
         self.clock.tick(60)
-
 
 
 if __name__ == "__main__":
