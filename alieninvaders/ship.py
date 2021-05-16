@@ -5,6 +5,7 @@ from os import pardir, path
 import pygame as pg
 from pygame.sprite import Sprite
 
+from bullet import Bullet
 import color
 
 SHIP_IMG = path.join(pardir, "resources/images/ship.bmp")
@@ -21,10 +22,8 @@ class Ship(Sprite):
         self.screen_rect = game.screen.get_rect()
         self.rect = self.image.get_rect()
 
-        # Start each new ship at the bottom center of the screen.
+        # Ship position and movement.
         self.center_ship()
-
-        # Movement flags
         self.moving_right = False
         self.moving_left = False
 
@@ -51,6 +50,13 @@ class Ship(Sprite):
         self.rect.midbottom = self.screen_rect.midbottom
         self.x = float(self.rect.x)
 
-    def draw_ship(self):
+    def draw(self):
         """Draw the ship at its current location."""
         self.screen.blit(self.image, self.rect)
+
+    def shoot(self) -> tuple:
+        """Create a pair of bullets."""
+        return (
+            Bullet(self, self.rect.centerx - 18, self.rect.top),
+            Bullet(self, self.rect.centerx + 18, self.rect.top)
+        )

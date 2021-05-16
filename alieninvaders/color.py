@@ -1,5 +1,6 @@
 """This module stores the tuple values for the game colors."""
 
+# Colors (R, G, B)
 WHITE = (255, 255, 255)
 BG_GRAY = (222, 222, 222)
 BLACK = (0, 0, 0)

@@ -13,7 +13,6 @@ class Fleet:
         self.screen = game.screen
         self.settings = game.settings
         self.ship = game.ship
-
         # The sprite group where the aliens will be stored.
         self.aliens = pg.sprite.Group()
 

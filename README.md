@@ -8,7 +8,7 @@ Alien Invaders is a simple re-imagining of the classical 2D arcade game Space In
 
 **In-game Screenshot:**
 
-![](/home/yates/alieninvadersproject/AlienInvaders2.png)
+![](/home/yates/alieninvadersproject/AlienInvaders3.png)
 
 
 
@@ -58,16 +58,17 @@ See the **Create an Executable** tutorial to find out how you can create your ow
   With every level up, the aliens, ship, and bullets all increase in speed.
   The score for shooting down each alien increases as well.
 
-**NOTE:** The shooter can only fire three missiles at a time, so they have to try and aim more accurately.
+**NOTE:** The shooter can only fire three pairs of missiles at a time, so they have to try and aim more accurately.
 
 The game permanently stores your all-time high-score.
 
+![](/home/yates/alieninvadersproject/AlienInvaders2.png)
 
 
 
-## To-Do
 
-- [ ] There are still a few kinks to work out. E.g.: When the ship explodes, there is a delay.
+## To-do
+
 - [ ] The project documentation is not yet set up.
 - [ ] Some features may be added in the future - such as aliens shooting missiles at the player ship.
 
@@ -91,6 +92,7 @@ The game permanently stores your all-time high-score.
 │   ├── scoreboard.py
 │   ├── settings.py
 │   └── ship.py
+├── AlienInvaders3.png
 ├── AlienInvaders2.png
 ├── AlienInvaders.png
 ├── CHANGELOG.md
@@ -135,8 +137,6 @@ The game permanently stores your all-time high-score.
 └── tox.ini
 ```
 
-
-
 ## Meta
 
 Yates Macharaga  – [yatsiemac@gmail.com](yatsiemac@gmail.com)
@@ -156,3 +156,5 @@ If you'd like to contribute to Alien Invaders Project:
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
 5. Create a new Pull Request
+
+

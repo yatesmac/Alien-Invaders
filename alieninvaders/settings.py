@@ -10,9 +10,9 @@ class Settings:
     screen_width = 900
     screen_height = 600
     # Ship
-    ship_limit = 3
+    ship_limit = 2
     # Bullet
-    bullets_limit = 3
+    bullets_limit = 6
     # Alien
     fleet_drop_speed = 5
     # How quickly the game speeds up.
@@ -36,9 +36,9 @@ class Settings:
         Initialize settings at the beginning of the game, or
         Reset the ship's dynamic settings as the game progresses.
         """
-        self.ship_speed = 2.5
-        self.bullet_speed = 7.5
-        self.alien_speed = 1.0
+        self.ship_speed = 3
+        self.bullet_speed = 9
+        self.alien_speed = 2
         # Scoring
         self.alien_points = 50
 

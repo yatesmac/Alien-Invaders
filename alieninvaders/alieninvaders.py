@@ -29,7 +29,6 @@ from pygame.locals import (
 )
 
 from alien_fleet import Fleet
-from bullet import Bullet
 from button import Button, Tag
 from explosion import Explosion
 from game_stats import GameStats
@@ -37,6 +36,7 @@ from scoreboard import ScoreBoard
 from settings import Settings
 from ship import Ship
 
+# Paths to background image, and game sounds.
 BACKGROUND_IMG, SHOOT_WAV, SHIP_HIT_WAV, SHOT_ALIEN_WAV = [
     path.join(pardir, f"resources/{resource}")
     for resource in [
@@ -69,6 +69,7 @@ class AlienInvasion:
     def __init__(self):
         """Initialize the game, and create game resources."""
         self._init_pygame()
+
         self.settings = Settings()
         self.screen = pg.display.set_mode(
             (self.settings.screen_width, self.settings.screen_height)
@@ -77,22 +78,21 @@ class AlienInvasion:
         self.stats = GameStats(self)
         self.score_board = ScoreBoard(self)
         self.fleet = Fleet(self)
+        self.play_button = Button(self)
+        self.info_tag = Tag(self)
 
         # Sprite groups.
         self.aliens = self.fleet.aliens
         self.bullets = pg.sprite.Group()
         self.explosions = pg.sprite.Group()
 
-        self.clock = pg.time.Clock()
-        # Button and Tag
-        self.play_button = Button(self)
-        self.info_tag = Tag(self)
-
         # Sounds.
         self.shooting_sound = Sound(SHOOT_WAV)
         self.ship_hit_sound = Sound(SHIP_HIT_WAV)
         self.alien_shot_sound = Sound(SHOT_ALIEN_WAV)
         self._update_sounds()
+
+        self.clock = pg.time.Clock()
 
     @staticmethod
     def _init_pygame():
@@ -103,13 +103,13 @@ class AlienInvasion:
     def check_events(self):
         """Respond to key presses and mouse events."""
         for event in pg.event.get():
+            # Write high-score to file then Exit.
             if self._quit_game(event):
-                # Write high-score to file then Exit.
                 self.stats.write_highscore()
                 sys.exit()
 
+            # Reset the game.
             if self._start_game(event) and not self.stats.game_active:
-                # Reset the game settings
                 self.settings.initialize_dynamic_settings()
                 self._setup_new_game()
 
@@ -125,28 +125,9 @@ class AlienInvasion:
 
     def _start_game(self, event: pg.event.Event) -> bool:
         """Start a new game when the clicks Play or hits Enter."""
-        # The player clicks Play.
         if event.type == MOUSEBUTTONDOWN:
             return self.play_button.rect.collidepoint(pg.mouse.get_pos())
-        # The player presses enter.
         return event.type == KEYDOWN and event.key == K_RETURN
-
-    def _setup_new_game(self):
-        """Reset the game statistics and create a new board."""
-        self.stats.reset_stats()
-        self.stats.game_active = True
-        self.score_board.prep_images()
-        self._reset_sprites()
-
-        # Hide the mouse cursor.
-        pg.mouse.set_visible(False)
-
-    def _reset_sprites(self):
-        """Remove old bullets and aliens, create a new ship and alien fleet."""
-        self.aliens.empty()
-        self.bullets.empty()
-        self.fleet.create_fleet()
-        self.ship.center_ship()
 
     def _check_keydown_events(self, event: pg.event.Event):
         """Respond to key presses."""
@@ -166,22 +147,74 @@ class AlienInvasion:
         elif event.key == K_LEFT:
             self.ship.moving_left = False
 
+    def _setup_new_game(self):
+        """Reset the game statistics and create a new board."""
+        self.stats.reset_stats()
+        self.stats.game_active = True
+        self.score_board.prep_images()
+        self.ship.center_ship()
+        self._reset_all_sprites()
+        # Hide the mouse cursor.
+        pg.mouse.set_visible(False)
+
+    def _reset_all_sprites(self):
+        """Remove old bullets and aliens, create a new ship and alien fleet."""
+        self.aliens.empty()
+        self.bullets.empty()
+        self.fleet.create_fleet()
+
+    def _reset(self):
+        """Reset game when a life is lost."""
+        if self.stats.ships_left < 1:  # no more lives left
+            self.stats.game_active = False
+            pg.mouse.set_visible(True)
+
+        # Decrement ships left, update score-board, and reset game.
+        self.stats.ships_left -= 1
+        self.score_board.prep_ships()
+        self._reset_all_sprites()
+        sleep(0.3)
+
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
         if len(self.bullets) < self.settings.bullets_limit:
-            new_bullet = Bullet(self)
-            self.bullets.add(new_bullet)
-            self.shooting_sound.play()
+            new_bullets = self.ship.shoot()
+            if new_bullets:
+                self.bullets.add(new_bullets)
+                self.shooting_sound.play()
+
+    def _collisions(self):
+        """Respond to alien-ship collisions, and aliens hitting the screen bottom."""
+        # Ship collision: play sound, make explosion.
+        explosion = Explosion(self.ship.rect.center)
+        self.explosions.add(explosion)
+        self.ship_hit_sound.play()
+
+    def _alien_ship_collision(self) -> bool:
+        """Return True if ship is hit by an alien."""
+        ship_hit = pg.sprite.spritecollide(self.ship, self.aliens, True)
+        if ship_hit:
+            for _ in ship_hit:
+                self._collisions()
+                return True
+
+    def _alien_ground_collision(self) -> bool:
+        """Return True if any aliens have reached the bottom of the screen."""
+        screen_rect = self.screen.get_rect()
+        for alien in self.aliens.sprites():
+            if alien.rect.bottom >= screen_rect.bottom:
+                # Check if AT LEAST one alien reaches the ground.
+                self._collisions()
+                return True
 
     def _alien_bullet_collision(self):
         """Respond to bullet-alien collision."""
-        # Remove any bullets and aliens that have collided.
         collisions = pg.sprite.groupcollide(self.bullets, self.aliens, True, True)
-
         if collisions:
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
                 self.score_board.prep_score()
+                # For each collision, play sound, make explosion.
                 for alien in aliens:
                     explosion = Explosion(alien.rect.center)
                     self.explosions.add(explosion)
@@ -189,36 +222,27 @@ class AlienInvasion:
             self.score_board.check_high_score()
 
         if not self.aliens:
-            # Destroy existing bullets, create new fleet, increase game speed.
-            self.bullets.empty()
-            self.fleet.create_fleet()
-            self.settings.increase_level()
+            if not self.explosions:
+                # Destroy sprites left; create new fleet; increase game speed and level.
+                self.bullets.empty()
+                self.fleet.create_fleet()
+                self.settings.increase_level()
+                self.stats.level += 1
+                self.score_board.prep_level()
 
-            # Increase level.
-            self.stats.level += 1
-            self.score_board.prep_level()
+    def update_bullets(self):
+        """Update position of bullets and get rid of old bullets."""
+        self.bullets.update()
+        self._alien_bullet_collision()
 
-    def _alien_ship_collision(self):
-        """Respond to the ship being hit by an alien."""
-        if self.stats.ships_left < 1:  # no more lives left
-            self.stats.game_active = False
-            pg.mouse.set_visible(True)
-
-        # Decrement ships left, and update score-board
-        self.stats.ships_left -= 1
-        self.score_board.prep_ships()
-
-        self._reset_sprites()
-        sleep(1.5)
-
-    def _alien_ground_collision(self):
-        """Check if any aliens have reached the bottom of the screen."""
-        screen_rect = self.screen.get_rect()
-        for alien in self.aliens.sprites():
-            if alien.rect.bottom >= screen_rect.bottom:
-                # Treat this as the same as if the ship hot hit.
-                self._alien_ship_collision()
-                break
+    def update_aliens(self):
+        """Update the position of all aliens in the fleet."""
+        self.fleet.check_fleet_edges()
+        alien_collisions: bool = self._alien_ship_collision() or self._alien_ground_collision()
+        self.aliens.update()
+        self.explosions.update()
+        if alien_collisions:
+            self._reset()
 
     def _update_sounds(self):
         """Plays sounds if play = 1, stops sounds if play = -1."""
@@ -234,34 +258,6 @@ class AlienInvasion:
             elif self.settings.sound_playing == -1:
                 _sound.set_volume(0)
 
-    def update_bullets(self):
-        """Update position of bullets and get rid of old bullets."""
-        self.bullets.update()
-
-        # Get rid of bullets that have disappeared
-        for bullet in self.bullets.copy():
-            if bullet.rect.bottom <= 0:
-                self.bullets.remove(bullet)
-
-        self._alien_bullet_collision()
-
-    def update_aliens(self):
-        """Update the position of all aliens in the fleet."""
-        self.fleet.check_fleet_edges()
-        self.aliens.update()
-
-        # Look for alien-ship collisions
-        if pg.sprite.spritecollide(self.ship, self.aliens, True):
-            explosion = Explosion(self.ship.rect.center)
-            self.explosions.add(explosion)
-            self.ship_hit_sound.play()
-            self._alien_ship_collision()
-
-        # Look for aliens hitting the bottom og the screen.
-        self._alien_ground_collision()
-
-        self.explosions.update()
-
     def update_screen(self):
         """Update images on the screen, and flip to the new screen."""
         background = pg.image.load(BACKGROUND_IMG).convert()
@@ -269,15 +265,15 @@ class AlienInvasion:
             background, (self.settings.screen_width, self.settings.screen_height)
         )
         self.screen.blit(bg_image, (0, 0))
-        self.ship.draw_ship()
-        self.aliens.draw(self.screen)
-        for bullet in self.bullets.sprites():
-            bullet.draw_bullet()
+
+        # Draw sprites.
+        self.ship.draw()
         self.explosions.draw(self.screen)
+        self.aliens.draw(self.screen)
+        self.bullets.draw(self.screen)
 
         # Draw the score information
         self.score_board.show_score()
-
         # Draw the play button if the game is inactive.
         if not self.stats.game_active:
             # Button and Tag

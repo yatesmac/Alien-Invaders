@@ -13,7 +13,7 @@ BULLET_IMG = path.join(pardir, "resources/images/bullet.bmp")
 class Bullet(Sprite):
     """A class to manage bullets fired from the ship."""
 
-    def __init__(self, game):
+    def __init__(self, game, x: int, top: int):
         """Create a bullet object at the ship's current position."""
         super().__init__()
         self.screen = game.screen
@@ -25,17 +25,12 @@ class Bullet(Sprite):
 
         self.rect = self.image.get_rect()
         # Create a bullet rect at the top of the ship.
-        self.rect.midtop = game.ship.rect.midtop
-        # Store the bullet's position as a decimal value.
-        self.y = float(self.rect.y)
+        self.rect.top = top
+        self.rect.x = x
 
     def update(self):
-        """Move the bullet up the screen."""
-        # Update the decimal position of the bullet.
-        self.y -= self.settings.bullet_speed
-        # Update the rect position.
-        self.rect.y = self.y
-
-    def draw_bullet(self):
-        """Draw the bullet to the screen."""
-        self.screen.blit(self.image, self.rect)
+        """Update the bullet position."""
+        self.rect.y -= self.settings.bullet_speed
+        # Get rid of bullets that have disappeared from the screen.
+        if self.rect.bottom <= 0:
+            self.kill()

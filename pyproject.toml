@@ -15,7 +15,7 @@ line-length = 88
 include = '\.pyi?$'
 exclude = """
 (/(
-    \.eggs
+    \.eggs,
   | \.git,
   | \.tox,
   | \.venv,
