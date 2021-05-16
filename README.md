@@ -8,7 +8,7 @@ Alien Invaders is a simple re-imagining of the classical 2D arcade game Space In
 
 **In-game Screenshot:**
 
-![](/home/yates/alieninvadersproject/Alien-Invaders3.png)
+![](https://github.com/yatesmac/Alien-Invaders/blob/d58ffd1373c90d0bc9c18ab08ca0ab16b146a02f/Alien-Invaders3.png)
 
 
 
@@ -62,7 +62,7 @@ See the **Create an Executable** tutorial to find out how you can create your ow
 
 The game permanently stores your all-time high-score.
 
-![](/home/yates/alieninvadersproject/Alien-Invaders2.png)
+![](https://github.com/yatesmac/Alien-Invaders/blob/d58ffd1373c90d0bc9c18ab08ca0ab16b146a02f/Alien-Invaders3.png)
 
 
 
