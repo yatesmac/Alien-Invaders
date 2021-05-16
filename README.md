@@ -8,7 +8,7 @@ Alien Invaders is a simple re-imagining of the classical 2D arcade game Space In
 
 **In-game Screenshot:**
 
-![](/home/yates/alieninvadersproject/AlienInvaders3.png)
+![](/home/yates/alieninvadersproject/Alien-Invaders3.png)
 
 
 
@@ -62,7 +62,7 @@ See the **Create an Executable** tutorial to find out how you can create your ow
 
 The game permanently stores your all-time high-score.
 
-![](/home/yates/alieninvadersproject/AlienInvaders2.png)
+![](/home/yates/alieninvadersproject/Alien-Invaders2.png)
 
 
 
@@ -92,9 +92,9 @@ The game permanently stores your all-time high-score.
 │   ├── scoreboard.py
 │   ├── settings.py
 │   └── ship.py
-├── AlienInvaders3.png
-├── AlienInvaders2.png
-├── AlienInvaders.png
+├── Alien-Invaders3.png
+├── Alien-Invaders2.png
+├── Alien-Invaders.png
 ├── CHANGELOG.md
 ├── code_of_conduct.md
 ├── Create an Exacutable.md
@@ -133,8 +133,7 @@ The game permanently stores your all-time high-score.
 │       ├── alien_shot.wav
 │       ├── ship_hit.wav
 │       └── shoot.wav
-├── setup.py
-└── tox.ini
+└── setup.py
 ```
 
 ## Meta
@@ -151,10 +150,8 @@ Distributed under the [MIT](https://choosealicense.com/licenses/mit/) license. S
 
 If you'd like to contribute to Alien Invaders Project:
 
-1. Fork it (https://github.com/yatesmac/alieninvadersproject/fork)
+1. Fork it (https://github.com/yatesmac/Alien-Invaders/fork)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
 5. Create a new Pull Request
-
-

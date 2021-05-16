@@ -71,7 +71,7 @@ executables = [
 ]
 
 setup(
-    name="AlienInvaders",
+    name="Alien-Invaders",
     version="1.0.0",
     description="Space Shooter Gamme",
     options={"build_exe": build_exe_options},
