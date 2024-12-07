@@ -4,20 +4,16 @@ Alien Invaders is a simple re-imagining of the classical 2D arcade game Space In
 
 <!-- TOC -->
 
-- [Alien Invaders Game](#alien-invaders-game)
-
-  - [About](#about)
-  - [Installation](#installation)
-
+- [About](#about)
+- [Installation](#installation)
     - [Requirements](#requirements)
     - [Running the Game](#running-the-game)
     - [Quick Game Guide](#quick-game-guide)
-
-  - [To-do](#to-do)
-  - [Project Structure](#project-structure)
-  - [Meta](#meta)
-  - [Contribute](#contribute)
-  - [Acknowledgements](#acknowledgements)
+- [Project Structure](#project-structure)
+- [To-do](#to-do)
+- [Meta](#meta)
+- [Contribute](#contribute)
+- [Acknowledgements](#acknowledgements)
 
 <!-- /TOC -->
 
