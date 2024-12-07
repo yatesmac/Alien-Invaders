@@ -1,26 +1,43 @@
 # Alien Invaders Game
 
-[TOC]
-
-## About
-
 Alien Invaders is a simple re-imagining of the classical 2D arcade game Space Invaders.
 
-**In-game Screenshot:**
+<!-- TOC -->
 
-![Game Start](resources/images/game_play/Alien-Invaders2.png)
+- [Alien Invaders Game](#alien-invaders-game)
+
+  - [About](#about)
+  - [Installation](#installation)
+
+    - [Requirements](#requirements)
+    - [Running the Game](#running-the-game)
+    - [Quick Game Guide](#quick-game-guide)
+
+  - [To-do](#to-do)
+  - [Project Structure](#project-structure)
+  - [Meta](#meta)
+  - [Contribute](#contribute)
+  - [Acknowledgements](#acknowledgements)
+
+<!-- /TOC -->
+
+## About
 
 Alien Invaders is a shooter game in which the player controls a ship with lasers by moving it horizontally across the bottom of the screen and firing at aliens as they descend. The aim is to clear the screen of aliens, as they move horizontally back and forth across the screen, and vertically advance towards the bottom of the screen.
 
 When the player shoots down an alien, points are earned. When the screen is cleared of all aliens, the game moves a level up. As the levels increase, the aliens advance faster. However, the ship also moves and shoots faster.
 
+**In-game Screenshot:**
+
+![Game Start](resources/images/game_play/Alien-Invaders3.png)
+
 ## Installation
 
 ### Requirements
 
-| [Python 3.6 +](https://www.python.org/downloads/)        |
-| -------------------------------------------------------- |
-| [Pygame 2.0 +](http://www.pygame.org/) |
+| [`Python 3.6 +`](https://www.python.org/downloads/) |
+| ---------------------------------------- |
+| [`Pygame 2.0 +`](http://www.pygame.org/) |
 
 ### Running the Game
 
@@ -58,19 +75,13 @@ When the player shoots down an alien, points are earned. When the screen is clea
 - Game sounds can be muted or unmuted by pressing the ` M ` key.
 - By pressing `Esc` the player can exit the game.
 - When all the alien ships have been cleared, the player's level increases.
-  With every level up, the aliens, ship, and bullets all increase in speed.
-  The score for shooting down each alien increases as well.
+- With every level up, the aliens, ship, and bullets all increase in speed.
+- The score for shooting down each alien increases as well.
+- The game permanently stores your all-time high-score.
 
 **NOTE:** The shooter can only fire three pairs of missiles at a time, so they have to try and aim more accurately.
 
-The game permanently stores your all-time high-score.
-
-![Game Play](resources/images/game_play/Alien-Invaders3.png)
-
-## To-do
-
-- [ ] The project documentation is not yet set up.
-- [ ] Some features may be added in the future - such as aliens shooting missiles at the player ship.
+![Game Play](resources/images/game_play/Alien-Invaders2.png)
 
 ## Project Structure
 
@@ -125,6 +136,11 @@ The game permanently stores your all-time high-score.
         └── shoot.wav
 ```
 
+## To-do
+
+- [ ] The project documentation is not yet set up.
+- [ ] Some features may be added in the future - such as aliens shooting missiles at the player ship.
+
 ## Meta
 
 Yates Macharaga  – [ymacharaga@gmail.com](mailto:ymacharaga@gmail.com)
@@ -145,4 +161,4 @@ If you'd like to contribute to Alien Invaders Project:
 
 ## Acknowledgements
 
-This repository is a project carried out as part of a study of the book *Python Crash Course: A Hands-on, Project-based Introduction to Programming* (Second Edition, 2021) written by *Eric Matthes*. I further, incorporated other elements (such as game sounds, explosions, etc).
+This repository is a project carried out as part of a study of the book *Python Crash Course: A Hands-on, Project-based Introduction to Programming* (Second Edition, 2021) written by *Eric Matthes*. I also incorporated new elements (such as game sounds, explosions, etc).
